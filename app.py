@@ -13,49 +13,34 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# --- STILIZARE TOTALĂ PENTRU MEDIU ÎNTUNECAT (FORȚAT) ---
+# --- STILIZARE TOTALĂ PENTRU MEDIU ÎNTUNECAT FORȚAT ---
 st.markdown("""
     <style>
-    /* Forțare fundal întunecat pe tot ecranul, indiferent de setările de sistem */
-    html, body, [data-testid="stAppViewContainer"], .stApp {
-        background-color: #0F172A !important;
+    /* 1. Forțarea fundalului întunecat pentru aplicația principală și bara laterală */
+    .stApp, .main, [data-testid="stAppViewContainer"] { 
+        background-color: #0F172A !important; 
     }
-    
-    /* Header (bara de sus) transparent */
-    [data-testid="stHeader"] {
-        background-color: rgba(0,0,0,0) !important;
+    [data-testid="stSidebar"] { 
+        background-color: #1E293B !important; 
+        border-right: 1px solid #334155 !important;
     }
-
-    /* Stilizare Sidebar (Bara laterală) */
-    [data-testid="stSidebar"], [data-testid="stSidebarContent"] {
-        background-color: #1E293B !important;
+    [data-testid="stHeader"] { 
+        background-color: transparent !important; 
     }
 
-    /* Stilizare text general pentru vizibilitate pe fundal închis */
-    div.stMarkdown p, div.stMarkdown li, span, label { 
+    /* 2. Forțarea textului deschis la culoare (suprascrie modul Light) */
+    .stApp, .stApp p, .stApp span, .stApp li, .stApp label, .stApp div:not(.sol-card) { 
         color: #F8FAFC !important; 
         font-size: 16px; 
     }
     
-    /* Stilizare Titluri */
-    h1 { 
-        color: #FFFFFF !important; 
-        font-family: 'Segoe UI', Roboto, sans-serif !important; 
-        font-weight: 800 !important; 
-        text-shadow: 0px 2px 4px rgba(0,0,0,0.5); 
-    }
-    h2, h3, h4 { 
-        color: #38BDF8 !important; 
-        font-family: 'Segoe UI', Roboto, sans-serif !important; 
-        font-weight: 700 !important; 
-        margin-top: 15px !important; 
-    }
-    
-    /* Clase customizate pentru antet */
+    /* 3. Stilizare Headere */
+    h1 { color: #FFFFFF !important; font-family: 'Segoe UI', Roboto, sans-serif !important; font-weight: 800 !important; text-shadow: 0px 2px 4px rgba(0,0,0,0.5); }
+    h2, h3, h4 { color: #38BDF8 !important; font-family: 'Segoe UI', Roboto, sans-serif !important; font-weight: 700 !important; margin-top: 15px !important; }
     .header-univ { color: #38BDF8 !important; font-weight: 800 !important; margin-bottom: 0px !important; }
     .header-facultate { color: #94A3B8 !important; font-weight: 600 !important; margin-top: 0px !important; }
     
-    /* Stilizare Metrici */
+    /* 4. Stilizare blocuri metrice (KPI) */
     div[data-testid="stMetricBlock"] { 
         background-color: #1E293B !important; 
         padding: 20px !important; 
@@ -63,18 +48,29 @@ st.markdown("""
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3) !important; 
         border-left: 5px solid #38BDF8 !important; 
     }
-    div[data-testid="stMetricLabel"] > div { color: #94A3B8 !important; }
+    div[data-testid="stMetricLabel"] > div, div[data-testid="stMetricLabel"] span { color: #94A3B8 !important; }
     div[data-testid="stMetricValue"] > div { color: #FFFFFF !important; }
     
-    /* Stilizare carduri solutii */
+    /* 5. Stilizare carduri soluții */
     .sol-card {
         padding: 15px;
         border-radius: 10px;
-        background-color: #1E293B;
+        background-color: #1E293B !important;
         border-top: 4px solid #38BDF8;
         height: 100%;
         box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        color: #F8FAFC !important;
     }
+
+    /* 6. Stilizare Tab-uri pentru a nu fi albe pe Light Mode */
+    div[data-baseweb="tab-list"] { background-color: #1E293B !important; border-radius: 8px; padding: 5px; }
+    button[data-baseweb="tab"] { color: #94A3B8 !important; background-color: transparent !important; }
+    button[data-baseweb="tab"][aria-selected="true"] { color: #38BDF8 !important; background-color: #0F172A !important; border-radius: 5px; }
+    
+    /* 7. Elemente de input din Sidebar / Main */
+    .stSelectbox label, .stSlider label { color: #38BDF8 !important; font-weight: bold !important; }
+    div[data-baseweb="select"] > div, div[role="slider"] { background-color: #0F172A !important; border-color: #334155 !important; }
+    button[kind="primary"] { background-color: #38BDF8 !important; color: #0F172A !important; font-weight: bold !important; border: none !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -154,7 +150,7 @@ with st.sidebar:
     
     agenda_html = """
     <div style="font-family: 'Segoe UI', sans-serif;">
-        <textarea id="agenda_text" style="width: 100%; height: 180px; background-color: #1E293B; color: #F8FAFC; border: 1px solid #38BDF8; border-radius: 8px; padding: 10px; resize: vertical; outline: none; font-size: 14px;" placeholder="Ia notițe aici în timpul prezentării... (se salvează automat în memoria browserului)"></textarea>
+        <textarea id="agenda_text" style="width: 100%; height: 180px; background-color: #0F172A; color: #F8FAFC; border: 1px solid #38BDF8; border-radius: 8px; padding: 10px; resize: vertical; outline: none; font-size: 14px;" placeholder="Ia notițe aici în timpul prezentării... (se salvează automat în memoria browserului)"></textarea>
         <script>
             const agenda = document.getElementById('agenda_text');
             // Incarcam notitele anterioare
@@ -166,6 +162,7 @@ with st.sidebar:
         </script>
     </div>
     """
+    # Acum componenta este integrată STRICT în sidebar
     components.html(agenda_html, height=210)
 
 # Ponderi riscuri
@@ -308,7 +305,7 @@ def obtine_matrice_solutii(tip, intensitate):
                 "titlu": "🟠 CRIZĂ SEVERĂ: EXODUL CREIERELOR (AGILE KNOWLEDGE SHIFT)",
                 "tip_alerta": "warning",
                 "agile": "**Ajustarea Vitezei (Velocity Under Stress):** Când planifică Sprintul, Scrum Master-ul scade forțat volumul de muncă alocat echipei cu 20% pentru a stopa riscul de Burnout și demisii în lanț.",
-                "tech": "**Pair Programming Forțat:** Programatorii scriu cod în perechi (câte 2 la un singur ecran/task). Dacă un om demisionează subit, expertiza și logica codului rămân la celălalt.",
+                "tech": "**Pair Programming Forțat:** Programatorii scriu cod în perechi (câte 2 la un single ecran/task). Dacă un om demisionează subit, expertiza și logica codului rămân la celălalt.",
                 "hr": "**Intervenție Directă pe Climat:** Implementarea săptămânii de lucru comprimate de 4 zile (fără scăderi salariale) strict pe perioada de tensiune maximă a proiectului pentru a oferi recuperare psihologică."
             }
         else:
@@ -464,5 +461,5 @@ Anul: 2026 | Statut: CONFIDENȚIAL
 with tab4:
     st.subheader("📘 Fundamentarea Metodologică a Instrumentului IDSDC")
     st.markdown("Acest instrument utilizează ecuațiile liniare de propagare a riscului (Metodologia PMI/PMBOK):")
-    st.markdown("$$Cost_{Simulat} = Cost_{Initial} \\times [1 + (\\text{Intensitate} - 1) \\times w_{cost}]$$")
-    st.markdown("$$Durata_{Simulata} = Durata_{Initial} \\times [1 + (\\text{Intensitate} - 1) \\times w_{timp}]$$")
+    st.latex(r"Cost_{Simulat} = Cost_{Initial} \times [1 + (\text{Intensitate} - 1) \times w_{cost}]")
+    st.latex(r"Durata_{Simulata} = Durata_{Initial} \times [1 + (\text{Intensitate} - 1) \times w_{timp}]")
